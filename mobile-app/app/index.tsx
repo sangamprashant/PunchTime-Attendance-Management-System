@@ -59,7 +59,7 @@ export default function Landing() {
       setBackgroundColor(theme.statusBar.dark.backgroundColor);
       setStyle(theme.statusBar.dark.style);
       // remove  in prod
-      router.replace("/(main)/attendance")
+      router.replace("/(main)/assignments")
     }, [])
   );
 

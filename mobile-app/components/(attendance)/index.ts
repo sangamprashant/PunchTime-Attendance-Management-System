@@ -1,4 +1,5 @@
+import AttendanceGraph from "./attendance.graph";
 import AttendanceStats from "./attendance.stats";
 
-export { AttendanceStats };
+export { AttendanceGraph, AttendanceStats };
 

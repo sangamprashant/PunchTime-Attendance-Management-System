@@ -10,9 +10,21 @@ const weekData: WeekDayStatus[] = [
     { label: 'Fr', isMarked: false, isToday: false },
 ];
 
+// Generate last 10 dates
+const getLast10Days = (): string[] => {
+    const days = [];
+    const today = new Date();
+    for (let i = 9; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        days.push(date.getDate().toString());
+    }
+    return days;
+};
+
 const initialUserData: UserData = {
     name: 'Prashant Srivastav',
-    email: '',
+    email: 'srivastavp891@gmail.com',
     profileImage: '',
     stats: [
         { label: 'Attendance', value: 83, unit: '%', },
@@ -21,6 +33,14 @@ const initialUserData: UserData = {
         { label: 'Days Left', value: 2, max: 31, },
     ],
     weekData: weekData,
+    attendanceData: {
+        labels: getLast10Days(),
+        datasets: [
+            {
+                data: [6.5, 10, 7.5, 8, 5.5, 6, 7.2, 6.8, 8, 7.6],
+            },
+        ],
+    }
 }
 
 

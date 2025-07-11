@@ -1,4 +1,4 @@
-import { AttendanceStats } from '@/components/(attendance)';
+import { AttendanceGraph, AttendanceStats } from '@/components/(attendance)';
 import { useStatusBar } from '@/context/StatusBarContext';
 import theme from '@/theme';
 import { useFocusEffect } from 'expo-router';
@@ -19,6 +19,7 @@ export default function HomeScreen() {
         <Text className='text-white mb-5 text-xl font-bold'>Your Attandance</Text>
         {/* Stats */}
         <AttendanceStats />
+        <AttendanceGraph />
       </View>
     </ScrollView>
   );
