@@ -10,7 +10,7 @@ export default function HomeLayout() {
                 screenOptions={{
                     headerShown: false,
                     tabBarActiveTintColor: theme.colors.primary,
-                    tabBarInactiveTintColor: theme.colors.muted,
+                    tabBarInactiveTintColor: "#8e8e93",
                     tabBarStyle: {
                         backgroundColor: "#ffffff",
                         borderTopWidth: 0,
@@ -24,9 +24,16 @@ export default function HomeLayout() {
                 <Tabs.Screen
                     name="home"
                     options={{
-                        tabBarLabel: "Home",
                         tabBarIcon: ({ color, size, focused }) => (
                             <Ionicons name={focused ? "home" : "home-outline"} size={size} color={color} />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="timetable"
+                    options={{
+                        tabBarIcon: ({ color, size, focused }) => (
+                            <FontAwesome5 name={focused ? "calendar-alt" : "calendar"} size={size} color={color} />
                         ),
                     }}
                 />
@@ -34,31 +41,23 @@ export default function HomeLayout() {
                     name="attendance"
                     options={{
                         tabBarIcon: ({ color, size, focused }) => (
-                            <FontAwesome5 name={focused ? "calendar-check" : "calendar"} size={size} color={color} />
+                            <Ionicons name={focused ? "checkmark-circle" : "checkmark-circle-outline"} size={size} color={color} />
                         ),
                     }}
                 />
                 <Tabs.Screen
-                    name="leaves"
+                    name="calender"
                     options={{
                         tabBarIcon: ({ color, size, focused }) => (
-                            <MaterialIcons name={focused ? "time-to-leave" : "event-busy"} size={size} color={color} />
+                            <MaterialIcons name="calendar-today" size={size} color={color} />
                         ),
                     }}
                 />
                 <Tabs.Screen
-                    name="reports"
+                    name="assignments"
                     options={{
                         tabBarIcon: ({ color, size, focused }) => (
-                            <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={size} color={color} />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="profile"
-                    options={{
-                        tabBarIcon: ({ color, size, focused }) => (
-                            <Ionicons name={focused ? "person" : "person-outline"} size={size} color={color} />
+                            <MaterialIcons name={focused ? "assignment-turned-in" : "assignment"} size={size} color={color} />
                         ),
                     }}
                 />

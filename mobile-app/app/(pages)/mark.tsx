@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const reports = () => {
+const mark = () => {
   return (
     <View>
-      <Text>reports</Text>
+      <Text>mark</Text>
     </View>
   )
 }
 
-export default reports
+export default mark
 
 const styles = StyleSheet.create({})

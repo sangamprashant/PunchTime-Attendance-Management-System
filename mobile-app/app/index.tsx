@@ -30,19 +30,19 @@ const slides: Slide[] = [
     key: 's1',
     title: 'Clock‑in in a Tap',
     text: 'PunchTime lets employees mark attendance in seconds.',
-    image: require('../assets/images/landing/onboarding1.png'),
+    image: require('@/assets/images/landing/onboarding1.png'),
   },
   {
     key: 's2',
     title: 'Track Progress',
     text: 'View weekly stats and keep your team motivated.',
-    image: require('../assets/images/landing/onboarding2.png'),
+    image: require('@/assets/images/landing/onboarding2.png'),
   },
   {
     key: 's3',
     title: 'Smart Notifications',
     text: 'Get reminders for late check‑ins and upcoming shifts.',
-    image: require('../assets/images/landing/onboarding3.png'),
+    image: require('@/assets/images/landing/onboarding3.png'),
   },
 ];
 
@@ -58,7 +58,8 @@ export default function Landing() {
     useCallback(() => {
       setBackgroundColor(theme.statusBar.dark.backgroundColor);
       setStyle(theme.statusBar.dark.style);
-      router.replace("/(main)/home")
+      // remove  in prod
+      router.replace("/(main)/attendance")
     }, [])
   );
 
@@ -90,8 +91,6 @@ export default function Landing() {
   const handleSkip = () => {
     router.replace("/(auth)/login")
   };
-
-
 
   return (
     <SafeAreaWrapper>
