@@ -1,11 +1,20 @@
+// import { MaterialIcons } from "@expo/vector-icons";
+
 interface UserData {
   name: string;
   email: string;
+  shift: shifts;
   profileImage?: string;
   stats?: StatItem[];
   weekData?: WeekDayStatus[];
   attendanceData?: attendanceGraphData;
+  notificationData?: NotificationItem[];
+  announcementsData?: Announcement[];
+  taskData?: Task[];
+  calenderData?: CalendarEvent[];
 }
+
+type shifts = "Morning Shift" | "Evening Shift" | "Night Shift";
 
 type WeekDayStatus = {
   label: string;
@@ -37,6 +46,52 @@ type attendanceGraphData = {
 type CalendarEventType = "today" | "test" | "holiday";
 
 interface CalendarEvent {
-  date: string; 
+  date: string;
+  type: CalendarEventType;
+}
+
+type NotificationType = "action" | "info" | "reminder";
+
+type NotificationItem = {
+  id: string;
+  title: string;
+  time: string;
+  type: NotificationType;
+  buttonText?: string;
+  icon?: string;
+  iconColor?: string;
+  badge?: string;
+  badgeText?: string;
+  badgeColor?: string;
+};
+
+type Announcement = {
+  title: string;
+  description: string;
+  date: string;
+  type:
+    | "Holiday"
+    | "Update"
+    | "Policy"
+    | "Event"
+    | "Maintenance"
+    | "Reminder"
+    | "Training";
+};
+
+type TaskStatus = "Pending" | "Submitted" | "Overdue";
+
+interface Task {
+  id: string;
+  title: string;
+  dueDate: string;
+  status: TaskStatus;
+  assignedBy: string;
+}
+
+type CalendarEventType = "today" | "test" | "holiday";
+
+interface CalendarEvent {
+  date: string;
   type: CalendarEventType;
 }

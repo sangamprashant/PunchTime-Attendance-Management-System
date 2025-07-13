@@ -30,5 +30,22 @@ const getDateOfWeekday = (selectedDay: string, baseDay: string): Date => {
   return resultDate;
 };
 
-export { daysOfWeek, getDateOfWeekday, getRotatedDays };
+const baseShiftData = [
+  {
+    id: "1",
+    title: "Morning Shift",
+    time: "08:00 AM - 04:00 PM",
+  },
+  {
+    id: "2",
+    title: "Evening Shift",
+    time: "04:00 PM - 12:00 AM",
+  },
+  {
+    id: "3",
+    title: "Night Shift",
+    time: "12:00 AM - 08:00 AM",
+  },
+];
 
+export { daysOfWeek, getDateOfWeekday, getRotatedDays, baseShiftData };

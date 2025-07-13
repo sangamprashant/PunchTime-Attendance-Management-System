@@ -1,65 +1,9 @@
 import { useStatusBar } from "@/context/StatusBarContext";
+import { useUserData } from "@/context/UserDataContext";
 import theme from "@/theme";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-// Define task type
-type TaskStatus = "Pending" | "Submitted" | "Overdue";
-
-interface Task {
-  id: string;
-  title: string;
-  dueDate: string;
-  status: TaskStatus;
-  assignedBy: string;
-}
-
-// Dummy data
-const taskData: Task[] = [
-  {
-    id: "1",
-    title: "Prepare Sales Report",
-    dueDate: "15 July",
-    status: "Pending",
-    assignedBy: "Manager",
-  },
-  {
-    id: "2",
-    title: "Product Feedback Summary",
-    dueDate: "14 July",
-    status: "Submitted",
-    assignedBy: "QA Lead",
-  },
-  {
-    id: "3",
-    title: "Design Audit Slides",
-    dueDate: "13 July",
-    status: "Overdue",
-    assignedBy: "Creative Head",
-  },
-  {
-    id: "4",
-    title: "Internal Review Notes",
-    dueDate: "16 July",
-    status: "Pending",
-    assignedBy: "HR",
-  },
-  {
-    id: "5",
-    title: "Internal Review Notes",
-    dueDate: "16 July",
-    status: "Pending",
-    assignedBy: "HR",
-  },
-];
-
-// Group tasks by status
-const groupedTasks: { [key in TaskStatus]: Task[] } = {
-  Overdue: taskData.filter((t) => t.status === "Overdue"),
-  Pending: taskData.filter((t) => t.status === "Pending"),
-  Submitted: taskData.filter((t) => t.status === "Submitted"),
-};
 
 // Reusable task card
 const TaskCard = ({ task }: { task: Task }) => {
@@ -88,6 +32,7 @@ const TaskCard = ({ task }: { task: Task }) => {
 // Main screen
 const AssignmentsScreen = () => {
   const { setStyle, setBackgroundColor } = useStatusBar()
+  const { userData } = useUserData()
   useFocusEffect(
     useCallback(() => {
       setBackgroundColor(theme.colors.primary);
@@ -95,6 +40,13 @@ const AssignmentsScreen = () => {
     }, [])
   );
 
+  const taskData = userData?.taskData || []
+
+  const groupedTasks: { [key in TaskStatus]: Task[] } = {
+    Overdue: taskData.filter((t) => t.status === "Overdue"),
+    Pending: taskData.filter((t) => t.status === "Pending"),
+    Submitted: taskData.filter((t) => t.status === "Submitted"),
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -103,17 +55,19 @@ const AssignmentsScreen = () => {
         <Text style={styles.title}>My Tasks & Assignments</Text>
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-
         <View style={{ padding: 20 }}>
-
-          {Object.entries(groupedTasks).map(([section, tasks]) => (
-            <View key={section} style={styles.section}>
-              <Text style={styles.sectionTitle}>{section}</Text>
-              {tasks.map((task) => (
-                <TaskCard key={task.id} task={task} />
-              ))}
-            </View>
-          ))}
+          {Object.entries(groupedTasks).map(([section, tasks]) => {
+            return (
+              <React.Fragment key={section}>
+                {tasks.length > 0 && <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>{section}</Text>
+                  {tasks.map((task) => (
+                    <TaskCard key={task.id} task={task} />
+                  ))}
+                </View>}
+              </React.Fragment>
+            )
+          })}
         </View>
       </ScrollView>
     </View>

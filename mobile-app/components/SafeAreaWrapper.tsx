@@ -10,7 +10,7 @@ interface Props {
 export default function SafeAreaWrapper({ children, className = "" }: Props) {
     const { backgroundColor } = useStatusBar()
     return (
-        <SafeAreaView className={`flex-1 ${className}`}>
+        <SafeAreaView className={`${className}`} style={{ flex: 1 }}>
             {Platform.OS === "android" && (
                 <View style={{ height: StatusBar.currentHeight, backgroundColor: backgroundColor }} />
             )}

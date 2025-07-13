@@ -22,9 +22,70 @@ const getLast10Days = (): string[] => {
     return days;
 };
 
+
+const notificationData: NotificationItem[] = [
+    {
+        id: '1',
+        title: 'Mark today’s attendance',
+        time: 'Just now',
+        type: 'action',
+        buttonText: 'Submit'
+    },
+    {
+        id: '2',
+        title: 'Leave request approved by HR',
+        time: '2 hrs ago',
+        type: 'info',
+        icon: 'check-circle-outline',
+        iconColor: '#10B981'
+    },
+    {
+        id: '3',
+        title: '2 days left to submit timesheet',
+        time: '1 day ago',
+        type: 'reminder',
+        badge: '2',
+        badgeText: 'days left',
+        badgeColor: '#8B5CF6'
+    }
+]
+
+const announcements: Announcement[] = [
+    {
+        title: "Independence Day Holiday",
+        description: "The office will remain closed on 15th August in observance of Independence Day.",
+        date: "2025-08-15",
+        type: "Holiday"
+    },
+];
+
+// Dummy data
+const taskData: Task[] = [
+    {
+        id: "1",
+        title: "Prepare Sales Report",
+        dueDate: "15 July",
+        status: "Pending",
+        assignedBy: "Manager",
+    },
+];
+
+const calenderData: CalendarEvent[] = [
+  { date: "2025-07-12", type: "test" },
+  { date: "2025-07-03", type: "holiday" },
+  { date: "2025-07-04", type: "holiday" },
+  { date: "2025-07-05", type: "holiday" },
+  { date: "2025-07-06", type: "holiday" },
+  { date: "2025-07-07", type: "holiday" },
+  { date: "2025-07-08", type: "holiday" },
+  { date: "2025-07-09", type: "holiday" },
+  { date: "2025-07-10", type: "holiday" },
+];
+
 const initialUserData: UserData = {
     name: 'Prashant Srivastav',
     email: 'srivastavp891@gmail.com',
+    shift: "Night Shift",
     profileImage: '',
     stats: [
         { label: 'Attendance', value: 83, unit: '%', },
@@ -40,9 +101,12 @@ const initialUserData: UserData = {
                 data: [6.5, 10, 7.5, 8, 5.5, 6, 7.2, 6.8, 8, 7.6],
             },
         ],
-    }
+    },
+    notificationData,
+    announcementsData: announcements,
+    taskData,
+    calenderData
 }
-
 
 const UserDataContext = createContext<UserDataContextProps | undefined>(undefined);
 // SplashScreen.preventAutoHideAsync();

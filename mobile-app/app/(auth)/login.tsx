@@ -1,137 +1,162 @@
-import SafeAreaWrapper from '@/components/SafeAreaWrapper';
 import { useStatusBar } from '@/context/StatusBarContext';
 import theme from '@/theme';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
-    View,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet,
-    KeyboardAvoidingView,
-    Platform,
-    Alert,
-    Image,
+    useWindowDimensions,
+    View,
 } from 'react-native';
 
-const LoginScreen = () => {
-    const [employeeId, setEmployeeId] = useState('');
+export default function ModernLogin() {
+    const router = useRouter()
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const router = useRouter();
+    const { width } = useWindowDimensions();
 
     const { setStyle, setBackgroundColor } = useStatusBar()
-
     useFocusEffect(
         useCallback(() => {
-            setBackgroundColor(theme.statusBar.dark.backgroundColor);
-            setStyle(theme.statusBar.dark.style);
+            setBackgroundColor(theme.colors.primary);
+            setStyle(theme.statusBar.light.style);
         }, [])
     );
 
-    const handleLogin = () => {
-        if (!employeeId || !password) {
-            Alert.alert('Login Failed', 'Please enter both Employee ID and Password.');
-            return;
-        }
-
-        // TODO: Replace with API logic
-        console.log('Login:', { employeeId, password });
-
-        // on success
+    const handleSubmit = () => {
         router.replace("/(main)/home")
-    };
+    }
 
     return (
-        <SafeAreaWrapper>
-            <KeyboardAvoidingView
-                style={styles.container}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            >
-                <View style={styles.card}>
-                    {/* Logo */}
-                    <Image
-                        source={require('../../assets/images/auth/login.png')}
-                        style={styles.logo}
-                        resizeMode="contain"
-                    />
-
-                    {/* Title */}
-                    <Text style={styles.title}>PunchTime Login</Text>
-
-                    {/* Inputs */}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Employee ID"
-                        placeholderTextColor={theme.colors.textLight}
-                        value={employeeId}
-                        onChangeText={setEmployeeId}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        placeholderTextColor={theme.colors.textLight}
-                        secureTextEntry
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-
-                    {/* Login Button */}
-                    <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                        <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+            {/* Header with background and logo */}
+            <View style={styles.headerWrapper}>
+                <Image
+                    source={require('@/assets/images/auth/bg-auth.png')}
+                    style={[styles.bg, { width }]}
+                    resizeMode="cover"
+                />
+                <View style={styles.logoContainer}>
+                    <View style={{
+                        backgroundColor: "#ffffff", padding: 5, borderRadius: 10,
+                        overflow: "hidden",
+                        elevation: 2
+                    }}>
+                        <Image
+                            source={require('@/assets/images/favicon.png')}
+                            style={styles.icon}
+                            resizeMode="contain"
+                        />
+                    </View>
                 </View>
-            </KeyboardAvoidingView>
-        </SafeAreaWrapper>
+            </View>
+
+            {/* Login Form */}
+            <View style={styles.card}>
+                <Text style={styles.title}>Welcome back!</Text>
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Username"
+                    placeholderTextColor="#9CA3AF"
+                    value={username}
+                    onChangeText={setUsername}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="#9CA3AF"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                    <Text style={styles.buttonText}>Login</Text>
+                    <FontAwesome name="long-arrow-right" size={15} color="white" />
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
     );
-};
-
-export default LoginScreen;
-
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.background,
-        justifyContent: 'center',
-        paddingHorizontal: theme.spacing(6),
+        backgroundColor: '#fff',
     },
-    card: {
-        backgroundColor: theme.colors.background,
-        padding: theme.spacing(0),
+    headerWrapper: {
+        height: 250,
+        position: 'relative',
+        overflow: 'hidden',
+    },
+    bg: {
+        position: 'absolute',
+        height: '100%',
+        bottom: 0
+    },
+    logoContainer: {
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
     },
-    logo: {
-        width: 150,
-        height: 150,
-        marginBottom: theme.spacing(4),
+    icon: {
+        height: 60,
+        width: 60,
+        zIndex: 2,
+    },
+    card: {
+        paddingHorizontal: 24,
+        paddingTop: 90,
     },
     title: {
-        ...theme.font.h1,
+        fontSize: 24,
+        fontWeight: '700',
         color: theme.colors.primary,
+        marginBottom: 24,
         textAlign: 'center',
-        marginBottom: theme.spacing(6),
     },
     input: {
-        width: '100%',
-        borderWidth: 1,
-        borderColor: theme.colors.muted,
-        borderRadius: theme.radius.sm,
-        padding: theme.spacing(3),
+        backgroundColor: '#F3F4F6',
+        padding: 12,
+        borderRadius: 10,
+        marginBottom: 14,
         fontSize: 16,
-        color: theme.colors.textDark,
-        marginBottom: theme.spacing(4),
+        color: '#111827',
+    },
+    optionsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
+    optionText: {
+        fontSize: 13,
+        color: '#6B7280',
     },
     button: {
         backgroundColor: theme.colors.primary,
-        paddingVertical: theme.spacing(3),
-        borderRadius: theme.radius.sm,
+        paddingVertical: 14,
+        borderRadius: 12,
         alignItems: 'center',
-        width: '100%',
+        marginBottom: 12,
+        elevation: 2,
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "row",
+        gap: 6
     },
     buttonText: {
-        color: theme.colors.background,
-        ...theme.font.h2,
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '800',
     },
 });

@@ -28,20 +28,20 @@ interface Slide {
 const slides: Slide[] = [
   {
     key: 's1',
-    title: 'Clock‑in in a Tap',
-    text: 'PunchTime lets employees mark attendance in seconds.',
+    title: 'Mark Attendance in Seconds',
+    text: 'PunchTime empowers employees to clock in effortlessly using a QR scan. Attendance marking becomes smooth, secure, and instantaneous—no manual inputs or delays.',
     image: require('@/assets/images/landing/onboarding1.png'),
   },
   {
     key: 's2',
-    title: 'Track Progress',
-    text: 'View weekly stats and keep your team motivated.',
+    title: 'Monitor Attendance with Insight',
+    text: 'Managers and employees can view visual reports of attendance over time. Track performance, identify patterns, and ensure transparency with PunchTime’s integrated insights.',
     image: require('@/assets/images/landing/onboarding2.png'),
   },
   {
     key: 's3',
-    title: 'Smart Notifications',
-    text: 'Get reminders for late check‑ins and upcoming shifts.',
+    title: 'Never Miss a Punch Again',
+    text: `PunchTime sends timely alerts for check-ins, shift starts, and important updates. Whether you're an employee or a manager, you’ll always be notified—on time, every time.`,
     image: require('@/assets/images/landing/onboarding3.png'),
   },
 ];
@@ -59,7 +59,7 @@ export default function Landing() {
       setBackgroundColor(theme.statusBar.dark.backgroundColor);
       setStyle(theme.statusBar.dark.style);
       // remove  in prod
-      router.replace("/(main)/assignments")
+     router.replace("/(auth)/login")
     }, [])
   );
 

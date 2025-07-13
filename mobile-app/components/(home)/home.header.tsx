@@ -1,15 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { useUserData } from '@/context/UserDataContext'
 import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const HomeHeader = () => {
+    const router = useRouter()
+    const { userData } = useUserData()
+
+    const name = userData?.name || ""
+
     return (
         <View style={styles.header}>
-            <Text style={styles.title}>Presence</Text>
+            <Text style={styles.title}>{name}</Text>
             <View style={styles.headerIcons}>
-                <Ionicons name="paper-plane" size={20} color="white" />
-                <Ionicons name="notifications-outline" size={20} color="white" />
-                <Ionicons name="person-circle-outline" size={24} color="white" />
+                <TouchableOpacity onPress={() => router.push('/(pages)/notifications')}>
+                    <Ionicons name="notifications-outline" size={20} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push('/(pages)/profile')}>
+                    <Ionicons name="person-circle-outline" size={24} color="white" />
+                </TouchableOpacity>
             </View>
         </View>
     )

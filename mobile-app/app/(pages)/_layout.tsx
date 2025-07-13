@@ -21,6 +21,17 @@ export default function RootLayout() {
             headerShown: true,
           }}
         />
+        <Stack.Screen name='profile'
+          options={{
+            title: 'My Profile',
+            headerShown: true,
+          }} />
+
+        <Stack.Screen name="announcements" options={{ title: "Company Announcements", headerShown: true }} />
+        <Stack.Screen name="leave" options={{ title: "Apply for Leave", headerShown: true }} />
+        <Stack.Screen name="shift" options={{ title: "Shift Timings", headerShown: true }} />
+        <Stack.Screen name="reports" options={{ title: "My Attendance Reports", headerShown: true }} />
+        <Stack.Screen name="notifications" options={{ title: "Notifications", headerShown: true }} />
       </Stack>
     </>
   )
