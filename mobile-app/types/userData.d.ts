@@ -1,9 +1,13 @@
 // import { MaterialIcons } from "@expo/vector-icons";
 
+type role = "admin" | "manager"| "employee" 
+
 interface UserData {
   name: string;
   email: string;
   shift: shifts;
+  officeBranch?: OfficeBranch;
+  todayLogIn?: string;
   profileImage?: string;
   stats?: StatItem[];
   weekData?: WeekDayStatus[];
@@ -100,4 +104,13 @@ interface CalendarEvent {
 type EmployeeInfo = {
   icon: string;
   label: string;
+};
+
+type OfficeBranch = {
+  _id: string;
+  name: string;
+  address: string;
+  pincode: number;
+  state: string;
+  city: string;
 };
