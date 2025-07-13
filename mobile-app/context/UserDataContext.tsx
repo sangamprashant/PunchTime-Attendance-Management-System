@@ -71,15 +71,19 @@ const taskData: Task[] = [
 ];
 
 const calenderData: CalendarEvent[] = [
-  { date: "2025-07-12", type: "test" },
-  { date: "2025-07-03", type: "holiday" },
-  { date: "2025-07-04", type: "holiday" },
-  { date: "2025-07-05", type: "holiday" },
-  { date: "2025-07-06", type: "holiday" },
-  { date: "2025-07-07", type: "holiday" },
-  { date: "2025-07-08", type: "holiday" },
-  { date: "2025-07-09", type: "holiday" },
-  { date: "2025-07-10", type: "holiday" },
+    { date: "2025-07-12", type: "test" },
+    { date: "2025-07-03", type: "holiday" },
+];
+
+const employeeInfo = [
+    { icon: 'id-card-outline', label: 'Employee ID: EMP1024' },
+    { icon: 'briefcase-outline', label: 'Position: Software Developer' },
+    { icon: 'business-outline', label: 'Department: IT' },
+    { icon: 'call-outline', label: '+91 9876543210' },
+    { icon: 'mail-outline', label: 'srivastavp891@gmail.com' },
+    { icon: 'calendar-outline', label: 'Joining Date: Jan 10, 2021' },
+    { icon: 'location-outline', label: 'Bangalore, India' },
+    { icon: 'home-outline', label: 'Office Center: Tech Park Tower 3' },
 ];
 
 const initialUserData: UserData = {
@@ -105,7 +109,8 @@ const initialUserData: UserData = {
     notificationData,
     announcementsData: announcements,
     taskData,
-    calenderData
+    calenderData,
+    employeeInfo
 }
 
 const UserDataContext = createContext<UserDataContextProps | undefined>(undefined);

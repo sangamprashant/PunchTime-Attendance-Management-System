@@ -1,4 +1,5 @@
 import { useStatusBar } from '@/context/StatusBarContext'
+import { useUserData } from '@/context/UserDataContext'
 import theme from '@/theme'
 import { Ionicons } from '@expo/vector-icons'
 import { useFocusEffect } from 'expo-router'
@@ -14,6 +15,8 @@ import {
 
 const Profile = () => {
     const { setStyle, setBackgroundColor } = useStatusBar()
+    const { userData } = useUserData()
+    const employeeInfo = userData?.employeeInfo || []
 
     useFocusEffect(
         useCallback(() => {
@@ -23,17 +26,6 @@ const Profile = () => {
     )
 
     const [activeTab, setActiveTab] = useState<'Info' | 'Attendance'>('Info')
-
-    const employeeInfo = [
-        { icon: 'id-card-outline', label: 'Employee ID: EMP1024' },
-        { icon: 'briefcase-outline', label: 'Position: Software Developer' },
-        { icon: 'business-outline', label: 'Department: IT' },
-        { icon: 'call-outline', label: '+91 9876543210' },
-        { icon: 'mail-outline', label: 'srivastavp891@gmail.com' },
-        { icon: 'calendar-outline', label: 'Joining Date: Jan 10, 2021' },
-        { icon: 'location-outline', label: 'Bangalore, India' },
-        { icon: 'home-outline', label: 'Office Center: Tech Park Tower 3' },
-    ];
 
     return (
         <>

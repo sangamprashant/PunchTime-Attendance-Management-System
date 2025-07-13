@@ -12,6 +12,7 @@ interface UserData {
   announcementsData?: Announcement[];
   taskData?: Task[];
   calenderData?: CalendarEvent[];
+  employeeInfo?: EmployeeInfo[];
 }
 
 type shifts = "Morning Shift" | "Evening Shift" | "Night Shift";
@@ -95,3 +96,8 @@ interface CalendarEvent {
   date: string;
   type: CalendarEventType;
 }
+
+type EmployeeInfo = {
+  icon: string;
+  label: string;
+};

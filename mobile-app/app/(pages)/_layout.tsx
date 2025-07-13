@@ -1,10 +1,11 @@
+import ProtectedRoute from '@/components/ProtectedRoutes'
 import theme from '@/theme'
 import { Stack } from 'expo-router'
 import React from 'react'
 
 export default function RootLayout() {
   return (
-    <>
+    <ProtectedRoute>
       <Stack screenOptions={{ headerShown: false, headerStyle: { backgroundColor: theme.colors.primary, }, headerTintColor: '#fff', headerTitleStyle: { fontWeight: 'bold', }, headerTitleAlign: 'center' }}>
         <Stack.Screen
           name="mark"
@@ -33,6 +34,6 @@ export default function RootLayout() {
         <Stack.Screen name="reports" options={{ title: "My Attendance Reports", headerShown: true }} />
         <Stack.Screen name="notifications" options={{ title: "Notifications", headerShown: true }} />
       </Stack>
-    </>
+    </ProtectedRoute>
   )
 }
