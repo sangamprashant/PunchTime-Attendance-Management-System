@@ -2,6 +2,7 @@
 import { ENV } from "../_env";
 import { IUser } from "../models/User.model";
 import * as UserRepository from "../repositories/User.repository";
+import jwt from "jsonwebtoken";
 
 export const createAdminIfNotExists = async () => {
   const existing = await UserRepository.findUserByEmail(ENV.ADMIN_EMAIL);
@@ -17,6 +18,40 @@ export const createAdminIfNotExists = async () => {
   } else {
     console.log("ℹ️ Admin exists");
   }
+};
+
+export const loginUser = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  const user = await UserRepository.findUserByEmail(email);
+  if (!user) {
+    throw new Error("Invalid credentials. Please check your password.");
+  }
+
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+    throw new Error("Invalid credentials. Please check your password.");
+  }
+
+  const token = jwt.sign(
+    { id: user._id, role: user.role },
+    ENV.JWT_SECRET
+  );
+
+  return {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      shift: user.shift,
+    },
+    token,
+  };
 };
 
 export const getAllUsers = async (): Promise<IUser[]> => {

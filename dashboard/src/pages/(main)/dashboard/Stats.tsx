@@ -1,35 +1,84 @@
-import { HiOutlineChartBar, HiOutlineTicket, HiOutlineUserGroup } from 'react-icons/hi'
+import { JSX } from 'react';
+import {
+  HiOutlineUserGroup,
+  HiOutlineOfficeBuilding,
+  HiOutlineClock,
+  HiOutlineCheckCircle,
+  HiOutlineExclamationCircle,
+} from 'react-icons/hi';
 
-const Stats = () => {
-    return (
-        <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white p-4 rounded-lg shadow flex items-center gap-4">
-                    <HiOutlineUserGroup size={40} className="text-blue-500" />
-                    <div>
-                        <p className="text-gray-500">Total Travelers</p>
-                        <h3 className="text-xl font-bold">8,500</h3>
-                    </div>
-                </div>
-
-                <div className="bg-white p-4 rounded-lg shadow flex items-center gap-4">
-                    <HiOutlineTicket size={40} className="text-green-500" />
-                    <div>
-                        <p className="text-gray-500">Bookings This Month</p>
-                        <h3 className="text-xl font-bold">1,200</h3>
-                    </div>
-                </div>
-
-                <div className="bg-white p-4 rounded-lg shadow flex items-center gap-4">
-                    <HiOutlineChartBar size={40} className="text-yellow-500" />
-                    <div>
-                        <p className="text-gray-500">Revenue</p>
-                        <h3 className="text-xl font-bold">$50,000</h3>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+interface StatItem {
+  icon: JSX.Element;
+  label: string;
+  value: string | number;
 }
 
-export default Stats
+interface StatsProps {
+  role: Role;
+  data: {
+    totalEmployees?: number;
+    presentToday?: number;
+    absentToday?: number;
+    lateToday?: number;
+    totalBranches?: number;
+  };
+}
+
+const Stats = ({ role, data }: StatsProps) => {
+  const commonStats: StatItem[] = [
+    {
+      icon: <HiOutlineUserGroup size={36} className="text-blue-600" />,
+      label: 'Total Employees',
+      value: data.totalEmployees || 0,
+    },
+    {
+      icon: <HiOutlineCheckCircle size={36} className="text-green-600" />,
+      label: 'Present Today',
+      value: data.presentToday || 0,
+    },
+    {
+      icon: <HiOutlineExclamationCircle size={36} className="text-red-500" />,
+      label: 'Absent Today',
+      value: data.absentToday || 0,
+    },
+    {
+      icon: <HiOutlineClock size={36} className="text-yellow-500" />,
+      label: 'Late Comers',
+      value: data.lateToday || 0,
+    },
+  ];
+
+  const adminOnlyStats: StatItem[] = [
+    {
+      icon: <HiOutlineOfficeBuilding size={36} className="text-purple-600" />,
+      label: 'Office Branches',
+      value: data.totalBranches || 0,
+    },
+  ];
+
+  const displayedStats =
+    role === 'admin'
+      ? [...commonStats, ...adminOnlyStats]
+      : commonStats;
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-2">
+      {displayedStats.map((stat, index) => (
+        <div
+          key={index}
+          className="bg-white p-5 rounded-xl shadow-md flex items-center gap-4 hover:shadow-lg transition-shadow"
+        >
+          <div className="p-3 rounded-full bg-gray-100">{stat.icon}</div>
+          <div>
+            <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
+            <h3 className="text-2xl font-semibold text-gray-800">
+              {stat.value}
+            </h3>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Stats;

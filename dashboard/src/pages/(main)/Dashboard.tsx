@@ -1,16 +1,36 @@
-import Featured from "./dashboard/Featured";
-import Graphs from "./dashboard/Graphs";
+import { useAuth } from "../../providers/AuthenticationContext";
 import Stats from "./dashboard/Stats";
 
 const Dashboard = () => {
+    const { user, token } = useAuth()
 
-
+    if (!user || !user.role) return null
+    
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Travel Dashboard</h1>
-            <Stats />
-            <Featured />
-            <Graphs />
+
+            <Stats
+                role={user?.role}
+                data={{
+                    totalEmployees: 120,
+                    presentToday: 100,
+                    absentToday: 15,
+                    lateToday: 5,
+                    totalBranches: 3,
+                }}
+            />
+
+            <Stats
+                role="manager"
+                data={{
+                    totalEmployees: 120,
+                    presentToday: 100,
+                    absentToday: 15,
+                    lateToday: 5,
+                    totalBranches: 3,
+                }}
+            />
+
         </div>
     );
 };

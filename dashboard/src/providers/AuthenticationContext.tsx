@@ -1,17 +1,16 @@
 import CryptoJS from "crypto-js";
 import React, { createContext, useContext, useLayoutEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { ENV } from "../keys";
+import { apiRequest, errorMessage } from "../utilities";
 
 const SECRET_KEY = ENV.secretKey;
 
-interface User {
-    email: string;
-}
-
 interface AuthContextType {
-    user: User | null;
+    user: IUser | null;
     token: string | null;
-    login: (userData: User, token: string) => void;
+    login: (userData: Partial<IUser>) => void;
     logout: () => void;
 }
 
@@ -32,22 +31,22 @@ const decryptData = (ciphertext: string) => {
     }
 };
 
+type LogInData = {
+    token: string;
+    user: Partial<IUser>
+}
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
     const [token, setToken] = useState<string | null>(null);
+    const navigate = useNavigate()
 
     useLayoutEffect(() => {
         const savedUser = localStorage.getItem("user");
         const savedToken = localStorage.getItem("token");
-
         if (savedUser && savedToken) {
             const decryptedUser = decryptData(savedUser);
             const decryptedToken = decryptData(savedToken);
-
-            console.log({
-                decryptedUser,
-                decryptedToken,
-            })
             if (
                 decryptedUser &&
                 typeof decryptedUser === "object" &&
@@ -56,21 +55,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setUser(decryptedUser);
                 setToken(decryptedToken);
             } else {
-                console.warn("Invalid or tampered authentication data. Logging out...");
+                toast.warning("Invalid or tampered authentication data. Logging out..")
                 logout();
             }
         }
     }, []);
 
-    const login = (userData: User, authToken: string) => {
-        const encryptedUser = encryptData(userData);
-        const encryptedToken = encryptData(authToken);
-
-        setUser(userData);
-        setToken(authToken);
-
-        localStorage.setItem("user", encryptedUser);
-        localStorage.setItem("token", encryptedToken);
+    const login = async (userData: Partial<IUser>) => {
+        try {
+            const res: LogInData = await apiRequest("/users/login", {
+                method: "POST", body: { ...userData }
+            })
+            const encryptedUser = encryptData(res.user);
+            const encryptedToken = encryptData(res.token);
+            console.log(res)
+            setUser(res.user as IUser);
+            setToken(res.token);
+            localStorage.setItem("user", encryptedUser);
+            localStorage.setItem("token", encryptedToken);
+            navigate("/")
+        } catch (error) {
+            toast.error(errorMessage(error))
+        }
     };
 
     const logout = () => {
@@ -79,7 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         window.history.replaceState(null, "", "/");
-        window.location.href = "/";
+        navigate("/")
     };
 
     return (

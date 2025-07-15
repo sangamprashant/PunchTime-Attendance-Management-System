@@ -21,3 +21,7 @@ src/
 ├── app.ts
 └── index.ts
 ```
+
+
+
+create logout function in mobile application

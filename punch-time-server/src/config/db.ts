@@ -8,7 +8,7 @@ export const connectDB = async () => {
       dbName: "punch-time",
     });
     console.log("✅ MongoDB connected");
-    await seedAdmin(); // create admin if not exists
+    await seedAdmin();
   } catch (error) {
     console.error("❌ DB connection failed", error);
     process.exit(1);

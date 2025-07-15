@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#6D28D9',
         marginLeft: 2,
+        marginBottom:20
     },
     dateDay: {
         fontSize: 20,
