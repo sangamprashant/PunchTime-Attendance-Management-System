@@ -129,7 +129,6 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             console.error('Failed to fetch user data', error);
         } finally {
             setIsLoading(false);
-            // SplashScreen.hideAsync();
         }
     };
 

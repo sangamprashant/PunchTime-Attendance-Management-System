@@ -18,7 +18,7 @@ export interface IUser extends Document {
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // ✅ password field
+  password: { type: String, required: true }, 
   shift: {
     type: String,
     enum: ["Morning Shift", "Evening Shift", "Night Shift"],

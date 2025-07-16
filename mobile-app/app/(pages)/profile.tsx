@@ -14,9 +14,10 @@ import {
 } from 'react-native'
 
 const Profile = () => {
-    const { setStyle, setBackgroundColor } = useStatusBar()
     const { userData } = useUserData()
     const employeeInfo = userData?.employeeInfo || []
+    const { setStyle, setBackgroundColor } = useStatusBar()
+    const [activeTab, setActiveTab] = useState<'Info' | 'Attendance'>('Info')
 
     useFocusEffect(
         useCallback(() => {
@@ -24,8 +25,6 @@ const Profile = () => {
             setStyle(theme.statusBar.light.style)
         }, [])
     )
-
-    const [activeTab, setActiveTab] = useState<'Info' | 'Attendance'>('Info')
 
     return (
         <>

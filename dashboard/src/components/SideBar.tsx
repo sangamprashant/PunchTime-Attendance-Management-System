@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import { HiOutlineChartBar, HiOutlineClipboardList, HiOutlineViewGrid, HiX } from "react-icons/hi";
+import { HiOutlineCalendar, HiOutlineChartBar, HiOutlineCheckCircle, HiOutlineClipboardList, HiOutlineOfficeBuilding, HiOutlineUserGroup, HiOutlineViewGrid, HiX } from "react-icons/hi";
 import { PiUserCircleGearLight } from "react-icons/pi";
 import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
@@ -15,28 +15,134 @@ interface SideBarProps {
     children: React.ReactNode;
 }
 
-// Sidebar Links
-const linksList = [
-    { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
+interface SubLink {
+    title: string;
+    link: string;
+}
+
+interface NavLink {
+    title: string;
+    icon: JSX.Element;
+    link?: string;
+    subLinks?: SubLink[];
+}
+
+interface NavSection {
+    title: string;
+    links: NavLink[];
+}
+
+export const adminSections: NavSection[] = [
     {
-        title: "Bookings", icon: <HiOutlineClipboardList size={22} />, subLinks: [
-            { title: "Search", link: "/bookings/search" },
-            { title: "Create Booking", link: "/bookings/create" },
-            { title: "Payment Received", link: "/templates/create" },
-            { title: "Completed", link: "/templates/create" },
-        ]
+        title: "Dashboard",
+        links: [
+            { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
+        ],
     },
-    { title: "Analytics", link: "/analytics", icon: <HiOutlineChartBar size={22} /> },
+    {
+        title: "Employee Management",
+        links: [
+            {
+                title: "Manage Employees",
+                icon: <HiOutlineUserGroup size={22} />,
+                subLinks: [
+                    { title: "Add Employee", link: "/employee/add" },
+                    { title: "All Employees", link: "/employees/view" },
+                ],
+            },
+        ],
+    },
+    {
+        title: "Branch",
+        links: [
+            {
+                title: "Office Branches",
+                icon: <HiOutlineOfficeBuilding size={22} />,
+                subLinks: [
+                    { title: "Create Branch", link: "/branch/create" },
+                    { title: "View Branches", link: "/branch/view" },
+                ],
+            },
+        ],
+    },
 ];
+
+export const managerSections: NavSection[] = [
+    {
+        title: "Dashboard",
+        links: [
+            { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
+        ],
+    },
+    {
+        title: "Attendance",
+        links: [
+            {
+                title: "Team Attendance",
+                icon: <HiOutlineClipboardList size={22} />,
+                subLinks: [
+                    { title: "Branch Attendance", link: "/attendance/branch" },
+                    { title: "Approve Requests", link: "/attendance/approve" },
+                ],
+            },
+        ],
+    },
+    {
+        title: "Reports",
+        links: [
+            { title: "Reports", link: "/reports", icon: <HiOutlineChartBar size={22} /> },
+        ],
+    },
+];
+
+export const employeeSections: NavSection[] = [
+    {
+        title: "Dashboard",
+        links: [
+            { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
+        ],
+    },
+    {
+        title: "My Attendance",
+        links: [
+            {
+                title: "My Attendance",
+                icon: <HiOutlineCheckCircle size={22} />,
+                subLinks: [
+                    { title: "Mark Attendance", link: "/attendance/mark" },
+                    { title: "History", link: "/attendance/history" },
+                ],
+            },
+        ],
+    },
+    {
+        title: "Calendar",
+        links: [
+            { title: "Calendar", link: "/calendar", icon: <HiOutlineCalendar size={22} /> },
+        ],
+    },
+];
+
+
 
 const Dashboard = ({ children }: SideBarProps) => {
     const { isOpen, closeSidebar } = useSidebar();
     const { logout, user } = useAuth();
-    const [activeSubMenu, setActiveSubMenu] = useState<number[]>([]);
+    const [activeSubMenu, setActiveSubMenu] = useState<string[]>([]);
 
-    const toggleSubMenu = (index: number) => {
+    const toggleSubMenu = (index: string) => {
         activeSubMenu.includes(index) ? setActiveSubMenu(activeSubMenu.filter(i => i !== index)) : setActiveSubMenu([...activeSubMenu, index])
     };
+
+    let sidebarSections: NavSection[] = [];
+
+    if (user?.role === "admin") {
+        sidebarSections = adminSections;
+    } else if (user?.role === "manager") {
+        sidebarSections = managerSections;
+    } else {
+        sidebarSections = employeeSections;
+    }
 
     return (
         <div className="flex h-screen w-full">
@@ -57,27 +163,44 @@ const Dashboard = ({ children }: SideBarProps) => {
                 </div>
                 {/* Sidebar Navigation Links */}
                 <nav className="flex flex-col px-2 flex-1 overflow-y-auto max-h-[calc(100vh-120px)]">
-                    <Title title="Menu" />
-                    {linksList.map((link, index) => (
-                        <div key={index} className="mb-1">
-                            {/* Main Link */}
-                            {link.link ? (
-                                <SideLinks {...link} />
-                            ) : (
-                                <div className="cursor-pointer text-gray-300 flex items-center px-3 py-2 rounded-md hover:bg-gray-800 justify-between"
-                                    onClick={() => toggleSubMenu(index)}>
-                                    <div className="flex items-center">{link.icon} <span className="ml-3">{link.title}</span></div> <FaChevronDown fontSize={12} className={`transform duration-500 ${activeSubMenu.includes(index) ? "rotate-180" : ""}`} />
+                    {sidebarSections.map((section, sIndex) => (
+                        <div key={sIndex} className="mb-4">
+                            <Title title={section.title} />
+                            {section.links.map((link, index) => (
+                                <div key={index} className="mt-2">
+                                    {link.link ? (
+                                        <SideLinks {...link} />
+                                    ) : (
+                                        <div
+                                            className="cursor-pointer text-gray-300 flex items-center px-3 py-2 rounded-md hover:bg-gray-800 justify-between"
+                                            onClick={() => toggleSubMenu(`${section.title}+${index}`)}
+                                        >
+                                            <div className="flex items-center">
+                                                {link.icon} <span className="ml-3">{link.title}</span>
+                                            </div>
+                                            <FaChevronDown
+                                                fontSize={12}
+                                                className={`transform duration-500 ${activeSubMenu.includes(`${section.title}+${index}`)
+                                                    ? "rotate-180"
+                                                    : ""
+                                                    }`}
+                                            />
+                                        </div>
+                                    )}
+                                    {link.subLinks &&
+                                        activeSubMenu.includes(`${section.title}+${index}`) && (
+                                            <div className="pl-6 space-y-1">
+                                                {link.subLinks.map((subLink, subIndex) => (
+                                                    <SideLinks
+                                                        key={subIndex}
+                                                        {...subLink}
+                                                        className="text-gray-400 border-s rounded-none border-white/10"
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
                                 </div>
-                            )}
-
-                            {/* Sub Navigation (if available) */}
-                            {link.subLinks && activeSubMenu.includes(index) && (
-                                <div className="pl-6 space-y-1">
-                                    {link.subLinks.map((subLink, subIndex) => (
-                                        <SideLinks key={subIndex} {...subLink} className="text-gray-400 border-s rounded-none border-white/10" />
-                                    ))}
-                                </div>
-                            )}
+                            ))}
                         </div>
                     ))}
                 </nav>
@@ -96,7 +219,7 @@ const Dashboard = ({ children }: SideBarProps) => {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 bg-gray-100 overflow-auto transition-all duration-300 w-full">
+            <div className="flex-1 bg-white overflow-auto transition-all duration-300 w-full">
                 <Topbar />
                 {children}
             </div>

@@ -66,9 +66,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const res: LogInData = await apiRequest("/users/login", {
                 method: "POST", body: { ...userData }
             })
+            if ((res.user as IUser).role === "employee") return logout()
             const encryptedUser = encryptData(res.user);
             const encryptedToken = encryptData(res.token);
-            console.log(res)
             setUser(res.user as IUser);
             setToken(res.token);
             localStorage.setItem("user", encryptedUser);

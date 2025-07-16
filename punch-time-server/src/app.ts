@@ -1,7 +1,9 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import officeBranchRoutes from "./routes/OfficeBranch.routes";
 import userRoutes from "./routes/User.routes";
+import adminUserRoutes from "./routes/admin.user.routes";
 
 const app = express();
 app.use(morgan("dev"));
@@ -26,5 +28,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/branches", officeBranchRoutes);
+app.use("/api/v1/admin", adminUserRoutes);
 
 export default app;
