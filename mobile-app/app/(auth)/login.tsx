@@ -1,9 +1,12 @@
 import { useStatusBar } from '@/context/StatusBarContext';
+import { useUserData } from '@/context/UserDataContext';
 import theme from '@/theme';
+import errorMessage from '@/utility/errorMessage';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
+    Alert,
     Image,
     KeyboardAvoidingView,
     Platform,
@@ -17,10 +20,11 @@ import {
 } from 'react-native';
 
 export default function ModernLogin() {
-    const router = useRouter();
+    const { login } = useUserData()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { width } = useWindowDimensions();
+    const [loading, setLoading] = useState<boolean>(false)
 
     const { setStyle, setBackgroundColor } = useStatusBar();
     useFocusEffect(
@@ -30,8 +34,16 @@ export default function ModernLogin() {
         }, [])
     );
 
-    const handleSubmit = () => {
-        router.replace("/(main)/home");
+    const handleSubmit = async () => {
+        try {
+            setLoading(true)
+            const t: boolean = await login(username, password)
+            console.log(t)
+        } catch (error) {
+            Alert.alert("", errorMessage(error))
+        } finally {
+            setLoading(false)
+        }
     };
 
     return (
@@ -79,8 +91,8 @@ export default function ModernLogin() {
                         value={password}
                         onChangeText={setPassword}
                     />
-                    <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                        <Text style={styles.buttonText}>Login</Text>
+                    <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
+                        <Text style={styles.buttonText}>{loading ? "Loaging" : "Login"}</Text>
                         <FontAwesome name="long-arrow-right" size={16} color="white" />
                     </TouchableOpacity>
                 </View>

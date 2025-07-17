@@ -1,6 +1,8 @@
 import errorMessage from "./errorMessage";
 
-const BASE_URL = process.env.EXPO_BASE_URL || "";
+import Constants from "expo-constants";
+
+const { API_URL } = Constants.expoConfig?.extra || {};
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -18,7 +20,7 @@ export const apiRequest = async (
   try {
     const { method = "GET", body, headers = {}, token = "" } = options;
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    const response = await fetch(`${API_URL}${endpoint}`, {
       method,
       headers: {
         "Content-Type": "application/json",

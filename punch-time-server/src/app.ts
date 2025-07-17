@@ -4,6 +4,7 @@ import morgan from "morgan";
 import officeBranchRoutes from "./routes/OfficeBranch.routes";
 import userRoutes from "./routes/User.routes";
 import adminUserRoutes from "./routes/admin.user.routes";
+import appAuth from "./routes/app/user.auth.routes";
 
 const app = express();
 app.use(morgan("dev"));
@@ -26,9 +27,11 @@ app.use(
 
 app.use(express.json());
 
-// Routes
+// routes - for dashboad
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/branches", officeBranchRoutes);
 app.use("/api/v1/admin", adminUserRoutes);
+// routes - for mobile app
+app.use("/api/v2/user", appAuth);
 
 export default app;

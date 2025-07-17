@@ -1,6 +1,6 @@
 // import { MaterialIcons } from "@expo/vector-icons";
 
-type role = "admin" | "manager"| "employee" 
+type role = "admin" | "manager" | "employee";
 
 interface UserData {
   name: string;
@@ -30,7 +30,7 @@ type WeekDayStatus = {
 interface UserDataContextProps {
   userData: UserData | null;
   isUserDataLoading: boolean;
-  fetchUserData: () => Promise<void>;
+  login: (email: string, password: string) => Promise<boolean>;
 }
 
 interface StatItem {

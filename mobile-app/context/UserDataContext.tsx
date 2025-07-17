@@ -1,6 +1,14 @@
 // import { SplashScreen } from 'expo-router';
+import { apiRequest } from '@/utility/apiRequest';
+import errorMessage from '@/utility/errorMessage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import SplashScreen from './userLayout';
+import * as SecureStore from 'expo-secure-store';
+import NetInfo from '@react-native-community/netinfo';
+
+const STORAGE_KEY = 'user_data';
+const TOKEN_KEY = 'user_token';
 
 const weekData: WeekDayStatus[] = [
     { label: 'M', isMarked: false, isToday: false },
@@ -118,30 +126,91 @@ const UserDataContext = createContext<UserDataContextProps | undefined>(undefine
 
 export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [userData, setUserData] = useState<UserData | null>(null);
-    const [isUserDataLoading, setIsLoading] = useState<boolean>(true);
+    const [isUserDataLoading, setIsLoading] = useState<boolean>(false);
+    const [token, setToken] = useState<string | null>(null);
 
-    const fetchUserData = async () => {
+    const loadFromStorage = async () => {
         try {
             setIsLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            setUserData(initialUserData);
-        } catch (error) {
-            console.error('Failed to fetch user data', error);
+            const storedData = await SecureStore.getItemAsync(STORAGE_KEY);
+            const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+
+            if (storedData && storedToken) {
+                const parsedData: UserData = JSON.parse(storedData);
+                setUserData(parsedData);
+                setToken(storedToken);
+            }
+        } catch (err) {
+            console.error("Failed to load from storage", err);
         } finally {
             setIsLoading(false);
         }
     };
 
+    const saveToStorage = async (data: UserData, jwt: string) => {
+        await SecureStore.setItemAsync(STORAGE_KEY, JSON.stringify(data));
+        await SecureStore.setItemAsync(TOKEN_KEY, jwt);
+    };
+
+    const clearStorage = async () => {
+        await SecureStore.deleteItemAsync(STORAGE_KEY);
+        await SecureStore.deleteItemAsync(TOKEN_KEY);
+        setUserData(null)
+        setToken(null)
+    };
+
+    const login = async (email: string, password: string): Promise<boolean> => {
+        try {
+            const res: { token: string; user: UserData } = await apiRequest("/user/login", {
+                method: "POST",
+                body: { email, password },
+            });
+
+            setUserData(res.user);
+            setToken(res.token);
+            await saveToStorage(res.user, res.token);
+            return true;
+        } catch (error) {
+            Alert.alert("Login failed", errorMessage(error));
+            return false;
+        }
+    };
+
+    const syncToServer = async () => {
+        try {
+            const state = await NetInfo.fetch();
+            if (state.isConnected && token && userData) {
+                await apiRequest("/user/sync", {
+                    method: "POST",
+                    token,
+                    body: userData,
+                });
+            }
+        } catch (err) {
+            console.warn("Sync failed:", errorMessage(err));
+        }
+    };
+
     useEffect(() => {
-        fetchUserData();
+        clearStorage()
+        // loadFromStorage();
     }, []);
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            if (state.isConnected) {
+                syncToServer();
+            }
+        });
+        return unsubscribe;
+    }, [userData, token]);
 
     if (isUserDataLoading) {
         return <SplashScreen />;
     }
 
     return (
-        <UserDataContext.Provider value={{ userData, isUserDataLoading, fetchUserData }}>
+        <UserDataContext.Provider value={{ userData, isUserDataLoading, login }}>
             {children}
         </UserDataContext.Provider>
     );
