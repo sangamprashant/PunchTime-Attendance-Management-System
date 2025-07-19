@@ -1,8 +1,9 @@
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
 import { useStatusBar } from '@/context/StatusBarContext';
+import { useUserData } from '@/context/UserDataContext';
 import { slides } from '@/strings/strings';
 import theme from '@/theme';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { Redirect, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
@@ -25,6 +26,7 @@ export default function Landing() {
   const router = useRouter();
 
   const { setStyle, setBackgroundColor } = useStatusBar()
+  const { userData } = useUserData()
 
   useFocusEffect(
     useCallback(() => {
@@ -61,6 +63,8 @@ export default function Landing() {
   const handleSkip = () => {
     router.replace("/(auth)/login")
   };
+
+  if (userData) return <Redirect href="/(main)/home" />
 
   return (
     <SafeAreaWrapper>

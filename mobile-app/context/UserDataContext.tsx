@@ -6,6 +6,7 @@ import { Alert } from 'react-native';
 import SplashScreen from './userLayout';
 import * as SecureStore from 'expo-secure-store';
 import NetInfo from '@react-native-community/netinfo';
+import { useRouter } from 'expo-router';
 
 const STORAGE_KEY = 'user_data';
 const TOKEN_KEY = 'user_token';
@@ -122,12 +123,12 @@ const initialUserData: UserData = {
 }
 
 const UserDataContext = createContext<UserDataContextProps | undefined>(undefined);
-// SplashScreen.preventAutoHideAsync();
 
 export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [isUserDataLoading, setIsLoading] = useState<boolean>(false);
     const [token, setToken] = useState<string | null>(null);
+    const router = useRouter()
 
     const loadFromStorage = async () => {
         try {
@@ -157,6 +158,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         await SecureStore.deleteItemAsync(TOKEN_KEY);
         setUserData(null)
         setToken(null)
+        router.replace("/(auth)/login")
     };
 
     const login = async (email: string, password: string): Promise<boolean> => {
@@ -192,8 +194,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
 
     useEffect(() => {
-        clearStorage()
-        // loadFromStorage();
+        loadFromStorage();
     }, []);
 
     useEffect(() => {
@@ -210,7 +211,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
 
     return (
-        <UserDataContext.Provider value={{ userData, isUserDataLoading, login }}>
+        <UserDataContext.Provider value={{ userData, isUserDataLoading, login, clearStorage }}>
             {children}
         </UserDataContext.Provider>
     );

@@ -31,6 +31,7 @@ interface UserDataContextProps {
   userData: UserData | null;
   isUserDataLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
+  clearStorage: () => void;
 }
 
 interface StatItem {
