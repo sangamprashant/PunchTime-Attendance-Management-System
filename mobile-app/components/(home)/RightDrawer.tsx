@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -2, height: 0 },
         shadowRadius: 5,
         elevation: 10,
-        borderTopLeftRadius: 16,
-        borderBottomLeftRadius: 16,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
     },
     header: {
         flexDirection: 'row',

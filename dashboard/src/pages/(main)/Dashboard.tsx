@@ -2,10 +2,10 @@ import { useAuth } from "../../providers/AuthenticationContext";
 import Stats from "./dashboard/Stats";
 
 const Dashboard = () => {
-    const { user, token } = useAuth()
+    const { user } = useAuth()
 
     if (!user || !user.role) return null
-    
+
     return (
         <div className="p-4">
 

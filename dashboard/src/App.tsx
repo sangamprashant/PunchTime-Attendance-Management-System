@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import SideBar from "./components/SideBar"
 import { AnalyticsPage, Dashboard, LoginPage, NotFound, SettingPage } from "./pages"
-import { AddEmployeeForm, EmployeeView, OfficeBranchForm, ViewBranches } from "./pages/(admin)"
+import { AddEmployeeForm, AnnouncementsAdd, AnnouncementsView, EmployeeView, OfficeBranchForm, ViewBranches } from "./pages/(admin)"
 import { useAuth } from "./providers/AuthenticationContext"
 
 function App() {
@@ -25,6 +25,9 @@ function App() {
 
                 <Route path="/employee/add" element={<AddEmployeeForm />} />
                 <Route path="/employees/view" element={<EmployeeView />} />
+
+                <Route path="/announcements/add" element={<AnnouncementsAdd />} />
+                <Route path="/announcements/view" element={<AnnouncementsView />} />
               </>
               :
               <>

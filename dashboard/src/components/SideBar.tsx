@@ -1,6 +1,7 @@
 import React, { JSX, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import { HiOutlineCalendar, HiOutlineChartBar, HiOutlineCheckCircle, HiOutlineClipboardList, HiOutlineOfficeBuilding, HiOutlineUserGroup, HiOutlineViewGrid, HiX } from "react-icons/hi";
+import { HiOutlineChartBar, HiOutlineClipboardList, HiOutlineOfficeBuilding, HiOutlineUserGroup, HiOutlineViewGrid, HiX } from "react-icons/hi";
+import { HiOutlineSpeakerWave } from "react-icons/hi2";
 import { PiUserCircleGearLight } from "react-icons/pi";
 import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
@@ -53,6 +54,19 @@ export const adminSections: NavSection[] = [
         ],
     },
     {
+        title: "Announcements",
+        links: [
+            {
+                title: "Manage Announcements",
+                icon: <HiOutlineSpeakerWave size={22} />,
+                subLinks: [
+                    { title: "Add Announcements", link: "/announcements/add" },
+                    { title: "All Announcements", link: "/announcements/view" },
+                ],
+            },
+        ],
+    },
+    {
         title: "Branch",
         links: [
             {
@@ -95,36 +109,6 @@ export const managerSections: NavSection[] = [
     },
 ];
 
-export const employeeSections: NavSection[] = [
-    {
-        title: "Dashboard",
-        links: [
-            { title: "Dashboard", link: "/dashboard", icon: <HiOutlineViewGrid size={22} /> },
-        ],
-    },
-    {
-        title: "My Attendance",
-        links: [
-            {
-                title: "My Attendance",
-                icon: <HiOutlineCheckCircle size={22} />,
-                subLinks: [
-                    { title: "Mark Attendance", link: "/attendance/mark" },
-                    { title: "History", link: "/attendance/history" },
-                ],
-            },
-        ],
-    },
-    {
-        title: "Calendar",
-        links: [
-            { title: "Calendar", link: "/calendar", icon: <HiOutlineCalendar size={22} /> },
-        ],
-    },
-];
-
-
-
 const Dashboard = ({ children }: SideBarProps) => {
     const { isOpen, closeSidebar } = useSidebar();
     const { logout, user } = useAuth();
@@ -138,10 +122,8 @@ const Dashboard = ({ children }: SideBarProps) => {
 
     if (user?.role === "admin") {
         sidebarSections = adminSections;
-    } else if (user?.role === "manager") {
-        sidebarSections = managerSections;
     } else {
-        sidebarSections = employeeSections;
+        sidebarSections = managerSections;
     }
 
     return (

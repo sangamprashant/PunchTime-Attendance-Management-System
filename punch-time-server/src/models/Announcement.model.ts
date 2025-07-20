@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 // models/Announcement.model.ts
 export interface IAnnouncement extends Document {
-  user: mongoose.Types.ObjectId;
+  officeBranch: mongoose.Types.ObjectId;
   title: string;
   description: string;
   date: string;
@@ -17,7 +17,7 @@ export interface IAnnouncement extends Document {
 }
 
 const AnnouncementSchema = new Schema<IAnnouncement>({
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  officeBranch: { type: Schema.Types.ObjectId, ref: "OfficeBranch" },
   title: String,
   description: String,
   date: String,

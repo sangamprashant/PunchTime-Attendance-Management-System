@@ -200,7 +200,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener(state => {
             if (state.isConnected) {
-                syncToServer();
+                // syncToServer();
             }
         });
         return unsubscribe;
