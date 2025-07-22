@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useBranchContext } from "../(branches)/branches.context";
 import { PageHeader } from "../../../components";
 
 interface AnnouncementFormData {
@@ -26,6 +27,7 @@ const initialForm: AnnouncementFormData = {
 
 const AnnouncementsAdd: React.FC = () => {
     const [formData, setFormData] = useState<AnnouncementFormData>(initialForm);
+    const { branches } = useBranchContext()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,15 +44,16 @@ const AnnouncementsAdd: React.FC = () => {
             <PageHeader title="Add New Announcement" />
             <div className="mx-auto mt-10 p-6 bg-white rounded shadow">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <input
-                        type="text"
+                    <select
                         name="officeBranch"
-                        placeholder="Office Branch ID"
                         value={formData.officeBranch}
                         onChange={handleChange}
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border rounded overflow-clip"
                         required
-                    />
+                    >
+                        <option value="">Select a office branch</option>
+                        {branches.map((b, i) => <option key={i} value={b._id}>{b.name}, {b.address} - {b.pincode}</option>)}
+                    </select>
 
                     <input
                         type="text"

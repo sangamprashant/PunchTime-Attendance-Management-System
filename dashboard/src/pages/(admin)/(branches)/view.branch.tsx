@@ -1,35 +1,9 @@
-import { Alert, Spin, Table } from 'antd';
-import { useEffect, useState } from 'react';
+import { Table } from 'antd';
 import { PageHeader } from '../../../components';
-import { apiRequest, errorMessage } from '../../../utilities';
-import { useAuth } from '../../../providers/AuthenticationContext';
+import { useBranchContext } from './branches.context';
 
 const ViewBranches = () => {
-    const [branches, setBranches] = useState<Branch[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-
-    const { token } = useAuth()
-
-    const fetchBranches = async () => {
-        setLoading(true);
-        try {
-            const res = await apiRequest("/branches", {
-                method: "GET",
-                token: token as string
-            });
-            setBranches(res);
-        } catch (err) {
-            setError(errorMessage(err));
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchBranches();
-    }, []);
-
+    const { branches, loading } = useBranchContext()
     const columns = [
         {
             title: 'Name',
@@ -62,19 +36,14 @@ const ViewBranches = () => {
         <>
             <PageHeader title="All Office Branches" />
             <div className="p-6">
-                {loading ? (
-                    <Spin tip="Loading branches..." size="large" />
-                ) : error ? (
-                    <Alert message="Error" description={error} type="error" showIcon />
-                ) : (
-                    <Table
-                        columns={columns}
-                        dataSource={branches}
-                        rowKey="_id"
-                        bordered
-                        pagination={{ pageSize: 10 }}
-                    />
-                )}
+                <Table
+                    columns={columns}
+                    dataSource={branches}
+                    rowKey="_id"
+                    bordered
+                    pagination={{ pageSize: 10 }}
+                    loading={loading}
+                />
             </div>
         </>
     );

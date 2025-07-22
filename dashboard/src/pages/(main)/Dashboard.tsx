@@ -20,17 +20,6 @@ const Dashboard = () => {
                 }}
             />
 
-            <Stats
-                role="manager"
-                data={{
-                    totalEmployees: 120,
-                    presentToday: 100,
-                    absentToday: 15,
-                    lateToday: 5,
-                    totalBranches: 3,
-                }}
-            />
-
         </div>
     );
 };
