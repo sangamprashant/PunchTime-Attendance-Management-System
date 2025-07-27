@@ -1,12 +1,13 @@
 // import { SplashScreen } from 'expo-router';
 import { apiRequest } from '@/utility/apiRequest';
 import errorMessage from '@/utility/errorMessage';
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
-import SplashScreen from './userLayout';
-import * as SecureStore from 'expo-secure-store';
 import NetInfo from '@react-native-community/netinfo';
 import { useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import { registerForPushNotificationsAsync } from './NotificationContext';
+import SplashScreen from './userLayout';
 
 const STORAGE_KEY = 'user_data';
 const TOKEN_KEY = 'user_token';
@@ -129,6 +130,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const [isUserDataLoading, setIsLoading] = useState<boolean>(false);
     const [token, setToken] = useState<string | null>(null);
     const router = useRouter()
+    const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
 
     const loadFromStorage = async () => {
         try {
@@ -205,6 +207,23 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         });
         return unsubscribe;
     }, [userData, token]);
+
+    useEffect(() => {
+        registerForPushNotificationsAsync().then(token => {
+            if (token) {
+                setExpoPushToken(token);
+                console.log("Expo Push Token:", token);
+                // Send token to your server
+                apiRequest("/", {
+                    method: "POST",
+                    token: token,
+                    body: {
+                        expoPushToken
+                    }
+                })
+            }
+        });
+    }, [userData, token])
 
     if (isUserDataLoading) {
         return <SplashScreen />;
